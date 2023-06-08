@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -45,7 +45,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int b_Pause = 0; // key Pause Speed
+int b_SpeedUP = 0; // key UP Speed
+int b_SpeedDW = 0; // key DW Speed
+int v_Speed = 100; // gia tri toc do blink led
+int v_Pause = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,77 +94,73 @@ int main(void)
   MX_ADC1_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
-	int b_Stop = 0;
-	int b_SpeedUP = 0;
-	int b_SpeedDW = 0;
-	int v_Speed = 100;
-	int v_Pause = 0;
+	HAL_Delay(200);
+	printf("Khoi tao v_Speed %d \n", v_Speed);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1)
+	{
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		b_SpeedUP = HAL_GPIO_ReadPin(KEY0_GPIO_Port,KEY0_Pin);
-		b_SpeedDW = HAL_GPIO_ReadPin(KEY1_GPIO_Port,KEY1_Pin);
-		b_Stop = HAL_GPIO_ReadPin(KEYSTOP_GPIO_Port,KEYSTOP_Pin);		
-		
+		b_SpeedUP = HAL_GPIO_ReadPin(KEY0_GPIO_Port, KEY0_Pin);
+		b_SpeedDW = HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin);
+		b_Pause = HAL_GPIO_ReadPin(KEYSTOP_GPIO_Port, KEYSTOP_Pin);
+
 		if (!b_SpeedUP) // tich cuc muc thap
 		{
-			HAL_Delay(100);
+			HAL_Delay(50);
 			if (!b_SpeedUP)
-				{
+			{
 				v_Speed = v_Speed + 100;
 				v_Pause = 0;
-				HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin|LED_D3_Pin,GPIO_PIN_RESET);
-				}
-				//while(b_SpeedUP == 0){}
+				printf("v_Speed %d \n", v_Speed);
+				HAL_GPIO_WritePin(LED_D2_GPIO_Port, LED_D2_Pin | LED_D3_Pin, GPIO_PIN_RESET);	
+			}
 		}
 		else if (!b_SpeedDW) // tich cuc muc thap
 		{
-			HAL_Delay(100);
+			HAL_Delay(50);
 			if (!b_SpeedDW)
+			{
+				if (v_Speed < 100)
+				{
+					v_Pause = 1;
+					printf("v_Speed NONE \n");
+				}
+				else
 				{
 					v_Speed = v_Speed - 100;
 					v_Pause = 0;
-						if (v_Speed < 100)
-							{
-								v_Speed = 100;
-								v_Pause = 1;
-								printf("v_Speed NONE \n");
-							}
-						HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin|LED_D3_Pin,GPIO_PIN_RESET);
 				}
-				//while(b_SpeedDW == 0){}
+				printf("v_Speed %d \n", v_Speed);
+				HAL_GPIO_WritePin(LED_D2_GPIO_Port, LED_D2_Pin | LED_D3_Pin, GPIO_PIN_RESET);
+			}
 		}
-		else if (b_Stop) // tich cuc muc cao
+		else if (b_Pause) // tich cuc muc cao
 		{
 			HAL_Delay(100);
-			if (b_Stop)
-				{
-						v_Pause = ~v_Pause;
-						printf("b_Stop => v_Pause %d \n",v_Pause);
-						HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin|LED_D3_Pin,GPIO_PIN_RESET);
-				}
-				
+			if (b_Pause)
+			{
+				v_Pause = ~v_Pause&0x00000001; //phep toan AND bit 
+				printf("b_Pause => v_Pause %d \n", v_Pause);
+				HAL_GPIO_WritePin(LED_D2_GPIO_Port, LED_D2_Pin | LED_D3_Pin, GPIO_PIN_RESET);
+			}
 		}
-		
+
 		if (v_Pause)
 		{
-			HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin|LED_D3_Pin,GPIO_PIN_RESET);
-			HAL_Delay(500);
+			HAL_GPIO_WritePin(LED_D2_GPIO_Port, LED_D2_Pin | LED_D3_Pin, GPIO_PIN_RESET);
+			HAL_Delay(250); // han che Dât overflow
 		}
 		else
 		{
-			HAL_GPIO_TogglePin(LED_D2_GPIO_Port,LED_D2_Pin|LED_D3_Pin);
-			printf("v_Speed %d \n", v_Speed);
+			HAL_GPIO_TogglePin(LED_D2_GPIO_Port, LED_D2_Pin | LED_D3_Pin);
 			HAL_Delay(v_Speed);
 		}
-
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -221,11 +221,11 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1)
+	{
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -240,8 +240,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+	/* User can add his own implementation to report the file name and line number,
+	   ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
