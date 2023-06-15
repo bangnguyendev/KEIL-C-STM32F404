@@ -1,0 +1,8 @@
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:/Users/bang.nguyen-duy/AppData/Local/Arm/Packs/Keil/ARM_Compiler/1.7.2/Source/retarget_io.c
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:\Keil_v5\ARM\ARRMCCC\Bin\..\include\string.h
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:\Keil_v5\ARM\ARRMCCC\Bin\..\include\stdint.h
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:\Keil_v5\ARM\ARRMCCC\Bin\..\include\stdio.h
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:\Keil_v5\ARM\ARRMCCC\Bin\..\include\stdlib.h
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:\Keil_v5\ARM\ARRMCCC\Bin\..\include\assert.h
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: C:\Keil_v5\ARM\ARRMCCC\Bin\..\include\rt_sys.h
+stm32f4 4led 7 doan - 74hc595\retarget_io.o: .\RTE\_STM32F4_4LED_7_DOAN_-_74HC595\RTE_Components.h
