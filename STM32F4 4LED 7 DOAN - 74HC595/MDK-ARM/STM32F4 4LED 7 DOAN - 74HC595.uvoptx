@@ -152,22 +152,6 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>204</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134218336</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>startup_stm32f407xx.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32F4_4LED_7_DOAN___74HC595\startup_stm32f407xx.s\204</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>49</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
@@ -182,7 +166,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>50</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -198,7 +182,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>2</Number>
           <Type>0</Type>
           <LineNumber>52</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -214,7 +198,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>53</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -230,7 +214,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>5</Number>
+          <Number>4</Number>
           <Type>0</Type>
           <LineNumber>54</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -246,7 +230,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>6</Number>
+          <Number>5</Number>
           <Type>0</Type>
           <LineNumber>55</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -262,7 +246,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>7</Number>
+          <Number>6</Number>
           <Type>0</Type>
           <LineNumber>56</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -278,7 +262,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>8</Number>
+          <Number>7</Number>
           <Type>0</Type>
           <LineNumber>57</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -294,7 +278,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>9</Number>
+          <Number>8</Number>
           <Type>0</Type>
           <LineNumber>58</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -310,7 +294,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>10</Number>
+          <Number>9</Number>
           <Type>0</Type>
           <LineNumber>165</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -326,7 +310,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>11</Number>
+          <Number>10</Number>
           <Type>0</Type>
           <LineNumber>166</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -342,7 +326,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>12</Number>
+          <Number>11</Number>
           <Type>0</Type>
           <LineNumber>167</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -358,7 +342,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>13</Number>
+          <Number>12</Number>
           <Type>0</Type>
           <LineNumber>168</LineNumber>
           <EnabledFlag>1</EnabledFlag>
