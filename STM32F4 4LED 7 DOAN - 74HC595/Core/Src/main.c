@@ -65,6 +65,7 @@ float sensorValue, temperature;
 int in_led;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	HAL_GPIO_WritePin(Pin_Test_GPIO_Port,Pin_Test_Pin,GPIO_PIN_RESET);
   /* Prevent unused argument(s) compilation warning */
   UNUSED(htim);
 	HAL_ADC_Start(&hadc1);
@@ -74,6 +75,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	temperature = ((sensor_vol - SENSOR_V25) *1000 / SENSOR_AVG_SLOPE) + 25.0f;
 	printf("Gia Tri ADC %f \n",temperature);
 	in_led = (int)temperature;
+	HAL_GPIO_WritePin(Pin_Test_GPIO_Port,Pin_Test_Pin,GPIO_PIN_SET);
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
    */
@@ -206,10 +208,11 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_TIM2_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 	HAL_ADC_Start(&hadc1);
 	HAL_TIM_Base_Start_IT(&htim2);
-
+	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -221,6 +224,11 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 		display_4led(in_led);
+		for(int i=0;i<100;i=i+5)
+		{
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,i);
+			HAL_Delay(300);
+		}
 		//timer_val = __HAL_TIM_GET_COUNTER(&htim2);
 		//printf("Thoi gian thoi qua %d \n",timer_val);
   }

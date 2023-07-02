@@ -1,0 +1,27 @@
+--cpu=Cortex-M4.fp.sp
+"timer1_pwm_channel_1\startup_stm32f407xx.o"
+"timer1_pwm_channel_1\main.o"
+"timer1_pwm_channel_1\gpio.o"
+"timer1_pwm_channel_1\tim.o"
+"timer1_pwm_channel_1\stm32f4xx_it.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_msp.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_tim.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_tim_ex.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_rcc.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_rcc_ex.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_flash.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_flash_ex.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_flash_ramfunc.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_gpio.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_dma_ex.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_dma.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_pwr.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_pwr_ex.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_cortex.o"
+"timer1_pwm_channel_1\stm32f4xx_hal.o"
+"timer1_pwm_channel_1\stm32f4xx_hal_exti.o"
+"timer1_pwm_channel_1\system_stm32f4xx.o"
+--strict --scatter "Timer1_PWM_Channel_1\Timer1_PWM_Channel_1.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Timer1_PWM_Channel_1.map" -o Timer1_PWM_Channel_1\Timer1_PWM_Channel_1.axf
