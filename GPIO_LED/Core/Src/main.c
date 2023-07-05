@@ -54,7 +54,10 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void BN_GPIO_WriteBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState)
+{
+	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState);
+}
 /* USER CODE END 0 */
 
 /**
@@ -86,7 +89,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+	int status = 0;
+	int BN_PinState = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -96,11 +100,32 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_RESET);
-		HAL_Delay(300);
-		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
-		HAL_Delay(300);
-		
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_RESET);
+//		HAL_Delay(300);
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
+//		HAL_Delay(300);
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
+//		HAL_Delay(500);
+//		HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_6);
+//		HAL_Delay(500);
+		status = HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_3);
+
+		if (status == 1)
+			BN_GPIO_WriteBit(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
+		else
+		{
+			/* Check the parameters */
+			BN_GPIO_WriteBit(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_RESET);
+//			if(BN_PinState != GPIO_PIN_RESET)
+//			{
+//				GPIOA->BSRR = GPIO_PIN_6;
+//			}
+//			else
+//			{
+//				GPIOA->BSRR = (uint32_t)GPIO_PIN_6 << 16U;
+//			}
+		}
+
 		printf("HAL_RCC_GetSysClockFreq: %d Hz\n",HAL_RCC_GetSysClockFreq());
 		printf("HAL_RCC_GetHCLKFreq: %d Hz\n",HAL_RCC_GetHCLKFreq());
   }
@@ -129,7 +154,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 50;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -142,7 +167,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 

@@ -22,16 +22,19 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\duyba\OneDrive\Lop Uom Mam Vinschool\Lop Lap Trinh Nang Cao\KEIL-C-STM32F407\GPIO_LED\MDK-ARM\GPIO_LED.uvprojx
-Project File Date:  07/02/2023
+Project File Date:  07/03/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'GPIO_LED'
 compiling main.c...
+../Core/Src/main.c(93): warning:  #177-D: variable "BN_PinState"  was declared but never referenced
+  	int BN_PinState = 0;
+../Core/Src/main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=6594 RO-data=466 RW-data=28 ZI-data=1884  
+Program Size: Code=6602 RO-data=466 RW-data=28 ZI-data=1884  
 FromELF: creating hex file...
-"GPIO_LED\GPIO_LED.axf" - 0 Error(s), 0 Warning(s).
+"GPIO_LED\GPIO_LED.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -71,7 +74,7 @@ Package Vendor: Keil
 
    * Component: Keil.ARM Compiler::Compiler:I/O:STDOUT:ITM:1.2.0
       Source file:   Source/retarget_io.c
-Build Time Elapsed:  00:00:03
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

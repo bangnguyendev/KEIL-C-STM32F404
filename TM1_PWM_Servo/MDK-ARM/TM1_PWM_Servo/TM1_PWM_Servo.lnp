@@ -1,0 +1,27 @@
+--cpu=Cortex-M4.fp.sp
+"tm1_pwm_servo\startup_stm32f407xx.o"
+"tm1_pwm_servo\main.o"
+"tm1_pwm_servo\gpio.o"
+"tm1_pwm_servo\tim.o"
+"tm1_pwm_servo\stm32f4xx_it.o"
+"tm1_pwm_servo\stm32f4xx_hal_msp.o"
+"tm1_pwm_servo\stm32f4xx_hal_tim.o"
+"tm1_pwm_servo\stm32f4xx_hal_tim_ex.o"
+"tm1_pwm_servo\stm32f4xx_hal_rcc.o"
+"tm1_pwm_servo\stm32f4xx_hal_rcc_ex.o"
+"tm1_pwm_servo\stm32f4xx_hal_flash.o"
+"tm1_pwm_servo\stm32f4xx_hal_flash_ex.o"
+"tm1_pwm_servo\stm32f4xx_hal_flash_ramfunc.o"
+"tm1_pwm_servo\stm32f4xx_hal_gpio.o"
+"tm1_pwm_servo\stm32f4xx_hal_dma_ex.o"
+"tm1_pwm_servo\stm32f4xx_hal_dma.o"
+"tm1_pwm_servo\stm32f4xx_hal_pwr.o"
+"tm1_pwm_servo\stm32f4xx_hal_pwr_ex.o"
+"tm1_pwm_servo\stm32f4xx_hal_cortex.o"
+"tm1_pwm_servo\stm32f4xx_hal.o"
+"tm1_pwm_servo\stm32f4xx_hal_exti.o"
+"tm1_pwm_servo\system_stm32f4xx.o"
+--strict --scatter "TM1_PWM_Servo\TM1_PWM_Servo.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "TM1_PWM_Servo.map" -o TM1_PWM_Servo\TM1_PWM_Servo.axf

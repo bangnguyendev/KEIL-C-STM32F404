@@ -119,10 +119,10 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_OC_Start_IT(&htim2,TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
 	HAL_TIM_OC_Start_IT(&htim1,TIM_CHANNEL_2);
-	
+	HAL_TIM_OC_Start_IT(&htim2,TIM_CHANNEL_1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -155,6 +155,7 @@ int main(void)
 //		__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, i);
 //		HAL_Delay(200);
 //		}
+		HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
