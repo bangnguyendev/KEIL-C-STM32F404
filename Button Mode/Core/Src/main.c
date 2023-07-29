@@ -114,18 +114,37 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  check_button();
-	if (status == 1)
-	{
 		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_RESET);
-		HAL_Delay(300);
+		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D3_Pin,GPIO_PIN_RESET);
+		HAL_Delay(200);
 		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
-		HAL_Delay(300);
-	}
-	else if (status == 2)
-	{
-		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_RESET);
-	}
+		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D3_Pin,GPIO_PIN_SET);
+		HAL_Delay(200);
+//  check_button();
+//	if (status == 1)
+//	{
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D3_Pin,GPIO_PIN_SET);
+//		HAL_Delay(500);
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D3_Pin,GPIO_PIN_RESET);
+//		HAL_Delay(500);
+//	}
+//	else if (status == 2)
+//	{	
+//		HAL_GPIO_WritePin(LED_D2_GPIO_Port,LED_D2_Pin,GPIO_PIN_SET);
+//		HAL_GPIO_WritePin(LED_D3_GPIO_Port,LED_D3_Pin,GPIO_PIN_SET);
+//		for(int i =0; i <5;i++)
+//		{
+//			HAL_GPIO_TogglePin(LED_D2_GPIO_Port,LED_D2_Pin);
+//			HAL_Delay(200);
+//		}
+//		for(int i =0; i <5;i++)
+//		{
+//			HAL_GPIO_TogglePin(LED_D2_GPIO_Port,LED_D3_Pin);
+//			HAL_Delay(200);
+//		}
+//	}
 
 	printf("HAL_RCC_GetSysClockFreq: %d Hz\n",HAL_RCC_GetSysClockFreq());
 	printf("HAL_RCC_GetHCLKFreq: %d Hz\n",HAL_RCC_GetHCLKFreq());
