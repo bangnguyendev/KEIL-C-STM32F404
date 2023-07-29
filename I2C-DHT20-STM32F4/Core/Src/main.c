@@ -90,12 +90,22 @@ uint8_t read_register(uint8_t register_pointer)
 	return return_value;
 }
 
-//Trigger measurement data
-void trigger_measurement_data_dht20 ()
+typedef enum 
 {
+  DHT20_OK       			= 0x00U,
+  DHT20_ERROR_INIT    = 0x01U,
+  DHT20_ERROR_CRC     = 0x02U,
+  DHT20_BUSY				  = 0x03U
+} Status_Trigger_DHT20;
+
+//Trigger measurement data
+uint8_t trigger_measurement_data_dht20()
+{
+	Status_Trigger_DHT20 status = DHT20_OK;
+
 	HAL_Delay(100);
-	uint8_t status = read_register(0x71);
-	if ((status & 0x18) == 0x18) // et a byte of status word by sending 0x71. If the status word and 0x18 are not equal to 0x18
+	uint8_t status_init = read_register(0x71);
+	if ((status_init & 0x18) == 0x18) // et a byte of status word by sending 0x71. If the status word and 0x18 are not equal to 0x18
 	{
 		HAL_Delay(10);
 		uint8_t data_t[3];
@@ -145,18 +155,21 @@ void trigger_measurement_data_dht20 ()
 			else 
 			{
 				printf("CRC fail \n");
+				status = DHT20_ERROR_CRC;
 			}
 		}
 		else
 		{
 			printf("Check Bit[7] at Byte0: %x \n",buffer[0]&0x80);
+			status = DHT20_BUSY;
 		}
 
 	}
 	else //  initialize the 0x1B, 0x1C, 0x1E registers
 	{
-		
+		status = DHT20_ERROR_INIT;
 	}
+	return status;
 }
 
 
@@ -207,7 +220,7 @@ int main(void)
 			}
 	}
 	
-	HAL_Delay(1000);
+	HAL_Delay(100);
 	lcd_init();
   /* USER CODE END 2 */
 
@@ -218,16 +231,40 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		trigger_measurement_data_dht20();
+		Status_Trigger_DHT20 check_sensor  = trigger_measurement_data_dht20();
 		char buffer[20];
-		sprintf (buffer, "Humidity: %0.1f", RH);
-		lcd_put_cur(0,0);
-		lcd_send_string (buffer);
-		sprintf (buffer, "Temperature: %0.1f", Temp);
-		lcd_put_cur(1,0);
-		lcd_send_string (buffer);
-		HAL_Delay(700);
-		
+		if (check_sensor == DHT20_OK)
+		{
+			sprintf (buffer, "Humidity: %0.1f", RH);
+			lcd_put_cur(0,0);
+			lcd_send_string (buffer);
+			sprintf (buffer, "Temperature: %0.1f", Temp);
+			lcd_put_cur(1,0);
+			lcd_send_string (buffer);
+			HAL_Delay(700);
+		}
+		else if (check_sensor == DHT20_BUSY)
+		{
+			sprintf (buffer, "Humidity:--BUSY--");
+			lcd_put_cur(0,0);
+			lcd_send_string (buffer);
+			sprintf (buffer, "Temperature:--BUSY--");
+			lcd_put_cur(1,0);
+			lcd_send_string (buffer);
+			HAL_Delay(1000);
+			lcd_clear();
+		}
+		else
+		{
+			sprintf (buffer, "Humidity:--NONE--");
+			lcd_put_cur(0,0);
+			lcd_send_string (buffer);
+			sprintf (buffer, "Temperature:--NONE--");
+			lcd_put_cur(1,0);
+			lcd_send_string (buffer);
+			HAL_Delay(1000);
+			lcd_clear();
+		}
   }
   /* USER CODE END 3 */
 }

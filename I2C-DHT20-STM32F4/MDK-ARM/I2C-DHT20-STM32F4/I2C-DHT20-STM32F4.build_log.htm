@@ -21,17 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.1.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\duyba\OneDrive\Lop Uom Mam Vinschool\Lop Lap Trinh Nang Cao\Test\I2C-DHT20-STM32F4\MDK-ARM\I2C-DHT20-STM32F4.uvprojx
+C:\Users\duyba\OneDrive\Lop Uom Mam Vinschool\Lop Lap Trinh Nang Cao\KEIL-C-STM32F407\I2C-DHT20-STM32F4\MDK-ARM\I2C-DHT20-STM32F4.uvprojx
 Project File Date:  07/29/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'I2C-DHT20-STM32F4'
 compiling main.c...
+../Core/Src/main.c(234): warning:  #188-D: enumerated type mixed with another type
+  		Status_Trigger_DHT20 check_sensor  = trigger_measurement_data_dht20();
+../Core/Src/main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=15192 RO-data=704 RW-data=36 ZI-data=1972  
+Program Size: Code=15376 RO-data=704 RW-data=36 ZI-data=1972  
 FromELF: creating hex file...
-"I2C-DHT20-STM32F4\I2C-DHT20-STM32F4.axf" - 0 Error(s), 0 Warning(s).
+"I2C-DHT20-STM32F4\I2C-DHT20-STM32F4.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -71,7 +74,7 @@ Package Vendor: Keil
 
    * Component: Keil.ARM Compiler::Compiler:I/O:STDOUT:ITM:1.2.0
       Source file:   Source/retarget_io.c
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>
