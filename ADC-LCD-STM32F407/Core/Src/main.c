@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "gpio.h"
 
@@ -88,10 +89,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-	HAL_ADC_ConfigChannel(&hadc1,ADC_CHANNEL_0);
+	int dem = 0;
+	uint16_t data_adc[5];
+	HAL_ADC_Start_DMA(&hadc1,(uint32_t *)data_adc,5);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,12 +105,20 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_ADC_Start(&hadc1);
 		
-		value_adc1 = HAL_ADC_GetValue(&hadc1);
-		float value_adc1_f = ((float)value_adc1*3.3)/4095;
-		printf("Gia tri dien ap: %0.1f \n",value_adc1_f);
+//		printf("Gia tri dem:  %d \n",dem);
+//		if (dem == 100)
+//		{
+//			int rank1 = HAL_ADCEx_InjectedGetValue(&hadc1,ADC_INJECTED_RANK_1);
+//			printf("Gia tri rank1: %d \n",rank1);
+//		}
+		printf("Gia tri ADC_C1:  %d \n",data_adc[0]);
+		printf("Gia tri ADC_C2:  %d \n",data_adc[1]);
+		printf("Gia tri ADC_C3:  %d \n",data_adc[2]);
+		printf("Gia tri ADC_C_Temp:  %d \n",data_adc[3]);
+		printf("Gia tri ADC_C_Vref:  %d \n",data_adc[4]);
 		HAL_Delay(100);
+		printf("============== \n");
   }
   /* USER CODE END 3 */
 }

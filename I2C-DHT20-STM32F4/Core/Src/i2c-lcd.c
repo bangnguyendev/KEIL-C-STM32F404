@@ -88,6 +88,8 @@ void lcd_init (void)
 	HAL_Delay(1);
 	lcd_send_cmd (0x0C); //Display on/off control --> D = 1, C and B = 0. (Cursor and blink, last two bits)
 	HAL_Delay(5);
+	lcd_clear();
+	HAL_Delay(100);
 }
 
 void lcd_send_string (char *str)

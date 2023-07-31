@@ -34,6 +34,7 @@ adc-lcd-stm32f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_
 adc-lcd-stm32f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 adc-lcd-stm32f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 adc-lcd-stm32f407\main.o: ../Core/Inc/adc.h
+adc-lcd-stm32f407\main.o: ../Core/Inc/dma.h
 adc-lcd-stm32f407\main.o: ../Core/Inc/i2c.h
 adc-lcd-stm32f407\main.o: ../Core/Inc/gpio.h
 adc-lcd-stm32f407\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

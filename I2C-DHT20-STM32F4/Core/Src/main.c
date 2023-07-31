@@ -99,7 +99,7 @@ typedef enum
 } Status_Trigger_DHT20;
 
 //Trigger measurement data
-uint8_t trigger_measurement_data_dht20()
+Status_Trigger_DHT20 trigger_measurement_data_dht20()
 {
 	Status_Trigger_DHT20 status = DHT20_OK;
 
