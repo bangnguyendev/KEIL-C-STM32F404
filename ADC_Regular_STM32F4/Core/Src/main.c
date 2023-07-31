@@ -19,11 +19,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "i2c.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdio.h"
+#include "i2c-lcd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,11 +61,11 @@ void SystemClock_Config(void);
 uint32_t ADC_VAL[4];
 void ADC_Select_CH0 (void)
 {
- ADC_ChannelConfTypeDef sConfig = {0};
- sConfig.Channel = ADC_CHANNEL_0;
- sConfig.Rank = 1;
- sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
- if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+ ADC_ChannelConfTypeDef saConfig = {0};
+ saConfig.Channel = ADC_CHANNEL_0;
+ saConfig.Rank = 1;
+ saConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+ if (HAL_ADC_ConfigChannel(&hadc1, &saConfig) != HAL_OK)
  {
    Error_Handler();
  }
@@ -71,11 +73,11 @@ void ADC_Select_CH0 (void)
 // kh?i t?o ADC1 channel 1
 void ADC_Select_CH1 (void)
 {
- ADC_ChannelConfTypeDef sConfig = {0};
- sConfig.Channel = ADC_CHANNEL_1;
- sConfig.Rank = 2;
- sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
- if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+ ADC_ChannelConfTypeDef saConfig = {0};
+ saConfig.Channel = ADC_CHANNEL_1;
+ saConfig.Rank = 1;
+ saConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+ if (HAL_ADC_ConfigChannel(&hadc1, &saConfig) != HAL_OK)
  {
    Error_Handler();
  }
@@ -83,11 +85,11 @@ void ADC_Select_CH1 (void)
 // kh?i t?o ADC1 channel temp
 void ADC_Select_Temp (void)
 {
- ADC_ChannelConfTypeDef sConfig = {0};
- sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
- sConfig.Rank = 3;
- sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
- if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+ ADC_ChannelConfTypeDef saConfig = {0};
+ saConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
+ saConfig.Rank = 1;
+ saConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+ if (HAL_ADC_ConfigChannel(&hadc1, &saConfig) != HAL_OK)
  {
    Error_Handler();
  }
@@ -95,11 +97,11 @@ void ADC_Select_Temp (void)
 // kh?i t?o ADC1 channel vref
 void ADC_Select_Vref (void)
 {
- ADC_ChannelConfTypeDef sConfig = {0};
- sConfig.Channel = ADC_CHANNEL_VREFINT;
- sConfig.Rank = 4;
- sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
- if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+ ADC_ChannelConfTypeDef saConfig = {0};
+ saConfig.Channel = ADC_CHANNEL_VREFINT;
+ saConfig.Rank = 1;
+ saConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+ if (HAL_ADC_ConfigChannel(&hadc1, &saConfig) != HAL_OK)
  {
    Error_Handler();
  }
@@ -120,7 +122,7 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
+	
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -135,9 +137,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+	lcd_init();
 
-	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -150,7 +153,7 @@ int main(void)
 		
 		ADC_Select_CH0();
 		HAL_ADC_Start(&hadc1);
-		HAL_ADC_PollForConversion(&hadc1, 1000);
+		HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
 		ADC_VAL[0] = HAL_ADC_GetValue(&hadc1);
 		HAL_ADC_Stop(&hadc1);
 		HAL_Delay(10);
@@ -175,6 +178,59 @@ int main(void)
 		ADC_VAL[3] = HAL_ADC_GetValue(&hadc1);
 		HAL_ADC_Stop(&hadc1);
 		HAL_Delay(10);
+		
+		char buffer[20];
+		
+		lcd_put_cur(0, 0);
+		sprintf(buffer, "CH0: %d ", ADC_VAL[0]);
+		lcd_send_string(buffer);
+		
+		lcd_put_cur(1, 0);
+		sprintf(buffer, "CH1: %d ", ADC_VAL[1]);
+		lcd_send_string(buffer);
+		
+		lcd_put_cur(2, 0);
+		sprintf(buffer, "Tem: %d ", ADC_VAL[2]);
+		lcd_send_string(buffer);
+		
+		lcd_put_cur(3, 0);
+		sprintf(buffer, "Vre: %d ", ADC_VAL[3]);
+		lcd_send_string(buffer);
+		
+		lcd_put_cur(0, 10);
+		lcd_sent_number_xxxx(ADC_VAL[0]);
+		HAL_Delay(50);
+		
+		lcd_put_cur(1, 10);
+		lcd_sent_number_xxxx(ADC_VAL[1]);
+		HAL_Delay(50);
+		
+		lcd_put_cur(2, 10);
+		lcd_sent_number_xxxx(ADC_VAL[2]);
+		HAL_Delay(50);
+		
+		lcd_put_cur(3, 10);
+		lcd_sent_number_xxxx(ADC_VAL[3]);
+		HAL_Delay(50);
+		
+		
+		lcd_put_cur(0, 15);
+		lcd_sent_number_xxxx_no_zero(ADC_VAL[0]);
+		HAL_Delay(50);
+		
+		lcd_put_cur(1, 15);
+		lcd_sent_number_xxxx_no_zero(ADC_VAL[1]);
+		HAL_Delay(50);
+		
+		lcd_put_cur(2, 15);
+		lcd_sent_number_xxxx_no_zero(ADC_VAL[2]);
+		HAL_Delay(50);
+		
+		lcd_put_cur(3, 15);
+		lcd_sent_number_xxxx_no_zero(ADC_VAL[3]);
+		HAL_Delay(50);
+		
+		HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }

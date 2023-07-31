@@ -1,8 +1,10 @@
 --cpu=Cortex-M4.fp.sp
 "adc_regular_stm32f4\startup_stm32f407xx.o"
+"adc_regular_stm32f4\i2c-lcd.o"
 "adc_regular_stm32f4\main.o"
 "adc_regular_stm32f4\gpio.o"
 "adc_regular_stm32f4\adc.o"
+"adc_regular_stm32f4\i2c.o"
 "adc_regular_stm32f4\stm32f4xx_it.o"
 "adc_regular_stm32f4\stm32f4xx_hal_msp.o"
 "adc_regular_stm32f4\stm32f4xx_hal_adc.o"
@@ -21,9 +23,12 @@
 "adc_regular_stm32f4\stm32f4xx_hal_cortex.o"
 "adc_regular_stm32f4\stm32f4xx_hal.o"
 "adc_regular_stm32f4\stm32f4xx_hal_exti.o"
+"adc_regular_stm32f4\stm32f4xx_hal_i2c.o"
+"adc_regular_stm32f4\stm32f4xx_hal_i2c_ex.o"
 "adc_regular_stm32f4\stm32f4xx_hal_tim.o"
 "adc_regular_stm32f4\stm32f4xx_hal_tim_ex.o"
 "adc_regular_stm32f4\system_stm32f4xx.o"
+"adc_regular_stm32f4\retarget_io.o"
 --strict --scatter "ADC_Regular_STM32F4\ADC_Regular_STM32F4.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
