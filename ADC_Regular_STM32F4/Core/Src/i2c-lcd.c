@@ -63,7 +63,6 @@ void lcd_put_cur(int row, int col)
     lcd_send_cmd (cmd_col);
 }
 
-
 void lcd_init (void)
 {
 	// 4 bit initialisation
@@ -105,10 +104,10 @@ void lcd_sent_number_xxxx(int number)
 	int hundreds = (number % 1000) / 100;
 	int tens = (number % 100) / 10;
 	int units = number % 10;
-	lcd_send_data(thousands + '0');
-	lcd_send_data(hundreds + '0');
-	lcd_send_data(tens + '0');
-	lcd_send_data(units + '0');
+	lcd_send_data(thousands + 0x30); // + 0x30 tuong duong +48, tuong duong + '0' trong ASCII
+	lcd_send_data(hundreds + 0x30);
+	lcd_send_data(tens + 0x30);
+	lcd_send_data(units + 0x30);
 }
 
 void lcd_sent_number_xxxx_no_zero(int number)
@@ -119,10 +118,10 @@ void lcd_sent_number_xxxx_no_zero(int number)
 	int units = number % 10;
 	char so_xxxx[4];
 
-	so_xxxx[0] = thousands + '0';
-	so_xxxx[1] = hundreds + '0';
-	so_xxxx[2] = tens + '0';
-	so_xxxx[3] = units + '0';
+	so_xxxx[0] = thousands + 0x30;
+	so_xxxx[1] = hundreds + 0x30;
+	so_xxxx[2] = tens + 0x30;
+	so_xxxx[3] = units + 0x30;
 	if (thousands == 0)
 	{
 		so_xxxx[0] = 32;
