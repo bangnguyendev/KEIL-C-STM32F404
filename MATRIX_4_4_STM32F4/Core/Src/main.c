@@ -46,6 +46,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+char key;
+int mode = 0;
+int so[5] = {48};
+int number;
+int dem = 0;
+int matrix_col, matrix_row;  //debug printf LCD
 
 /* USER CODE END PV */
 
@@ -62,12 +68,7 @@ GPIO_TypeDef* col_port[4] = {COL1_GPIO_Port, COL2_GPIO_Port, COL3_GPIO_Port, COL
 
 char row_pin[4] = {ROW1_Pin, ROW2_Pin, ROW3_Pin, ROW4_Pin};
 char col_pin[4] = {COL1_Pin, COL2_Pin, COL3_Pin, COL4_Pin};
-char key;
-int mode = 0;
-int so[5] = {48};
-int number;
-int dem = 0;
-int matrix_col, matrix_row;  //debug printf LCD
+
 char scan_key()
 {
 	char keys[4][4] =
@@ -97,6 +98,26 @@ char scan_key()
 	return 0x20; // return ve khoang trang
 }
 
+void display_key(void)
+{
+		lcd_put_cur(0,0);
+		lcd_send_string("Row : ");
+		lcd_send_data(matrix_row + 48);
+
+		lcd_put_cur(1,0);
+		lcd_send_string("Col : ");
+		lcd_send_data(matrix_col + 48);
+
+		lcd_put_cur(2,0);
+		lcd_send_string("Key :");
+		lcd_send_data(key);
+
+		lcd_put_cur(3,0);
+		lcd_send_string("Key ASCII :");
+		char buffer[20];
+		sprintf(buffer,"0x%X - %d",key, key);
+		lcd_send_string(buffer);
+}
 /* USER CODE END 0 */
 
 /**
@@ -141,63 +162,51 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		key = scan_key();
 		
-		if (key == 'A')
+		if (key == 'A') //nhap 5 so:
 		{
-			lcd_put_cur(0,10);
-			lcd_send_string("Nhap 5 so:");
 			mode = 1;
 		}
-		else if (key == 'B')
+		else if (key == 'C') //xoa so, clear man hinh
 		{
 			mode = 2;
 		}
-		else if (key == 'D')
+		
+		if ((mode == 1) && (key == 'D')) // xac nhan da nhap xong
 		{
 			mode = 3;
 		}
 		
-		if (mode == 1)
+		if (mode == 1) //nhap 5 so:
 		{
-			lcd_put_cur(0,0);
-			lcd_send_string("Row : ");
-			lcd_send_data(matrix_row + 48);
-
-			lcd_put_cur(1,0);
-			lcd_send_string("Col : ");
-			lcd_send_data(matrix_col + 48);
-
-			lcd_put_cur(2,0);
-			lcd_send_string("Key :");
-			lcd_send_data(key);
-
-			lcd_put_cur(3,0);
-			lcd_send_string("Key ASCII :");
-			char buffer[20];
-			sprintf(buffer,"0x%X - %d",key, key);
-			lcd_send_string(buffer);
+			display_key();
+			
+			lcd_put_cur(0,10);
+			lcd_send_string("Nhap 5 so:");
 			
 			lcd_put_cur(1,10);
 			lcd_send_string("->:");
 			lcd_put_cur(1,19 - dem);
 			lcd_send_cmd (0x04); //Entry mode set --> I/D = 0 (increment cursor) & S = 0 (no shift)
 			lcd_send_cmd (0x0F); //Display on/off control --> D = 1, C and B = 1. (Cursor and blink, last two bits)
-			if ((key >= 48) && (key <=57))
+			
+			if ((key >= 48) && (key <=57)) //48 tuong ung '0', 57 tuong ung '9'
 			{
-					if (dem < 5)
-					{					
-						so[dem] = key;
-						lcd_send_data(key);
-						dem ++;
-						if (dem == 5)
-						{
-							mode = 3;
-						}
+				if (dem < 5)
+				{					
+					so[dem] = key;
+					lcd_send_data(key);
+					dem ++;
+					if (dem == 5)
+					{
+						mode = 3;
 					}
+				}
 			}
 			lcd_send_cmd (0x06); //Entry mode set --> I/D = 0 (increment cursor) & S = 0 (no shift)
 		}
-		else if (mode == 2)
+		else if (mode == 2) //xoa so, clear man hinh
 		{
+			
 			lcd_put_cur(2,10);
 			lcd_send_string("Xoa 5 so!!");
 			HAL_Delay(600);
@@ -210,7 +219,7 @@ int main(void)
 			number = 0;
 			lcd_init();
 		}
-		else if (mode == 3)
+		else if (mode == 3) // xac nhan da nhap xong
 		{
 			lcd_put_cur(2,10);
 			lcd_send_string("Done:");
@@ -225,30 +234,13 @@ int main(void)
 			
 			lcd_put_cur(1,14);
 			lcd_send_cmd (0x0F); //Display on/off control --> D = 1, C and B = 1. (Cursor and blink, last two bits)
-			
 		}
 		else
 		{
-			lcd_put_cur(0,0);
-			lcd_send_string("Row : ");
-			lcd_send_data(matrix_row + 48);
-
-			lcd_put_cur(1,0);
-			lcd_send_string("Col : ");
-			lcd_send_data(matrix_col + 48);
-
-			lcd_put_cur(2,0);
-			lcd_send_string("Key :");
-			lcd_send_data(key);
-
-			lcd_put_cur(3,0);
-			lcd_send_string("Key ASCII :");
-			char buffer[20];
-			sprintf(buffer,"0x%X - %d",key, key);
-			lcd_send_string(buffer);
+			display_key();
 		}
 
-		HAL_Delay(500);
+		HAL_Delay(50);
   }
   /* USER CODE END 3 */
 }

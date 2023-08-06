@@ -67,28 +67,28 @@ void lcd_put_cur(int row, int col)
 void lcd_init (void)
 {
 	// 4 bit initialisation
-	HAL_Delay(50);  // wait for >40ms
+	HAL_Delay(100);  // wait for >40ms
 	lcd_send_cmd (0x30);
-	HAL_Delay(5);  // wait for >4.1ms
+	HAL_Delay(10);  // wait for >4.1ms
 	lcd_send_cmd (0x30);
-	HAL_Delay(1);  // wait for >100us
+	HAL_Delay(5);  // wait for >100us
 	lcd_send_cmd (0x30);
-	HAL_Delay(10);
+	HAL_Delay(20);
 	lcd_send_cmd (0x20);  //4bit mode
-	HAL_Delay(10);
+	HAL_Delay(20);
 
   // dislay initialisation
 	lcd_send_cmd (0x28); //Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters)
-	HAL_Delay(1);
+	HAL_Delay(10);
 	lcd_send_cmd (0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
-	HAL_Delay(1);
+	HAL_Delay(10);
 	lcd_send_cmd (0x01);  //clear display
-	HAL_Delay(1);
-	HAL_Delay(1);
+	HAL_Delay(10);
+	HAL_Delay(10);
 	lcd_send_cmd (0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
-	HAL_Delay(1);
+	HAL_Delay(10);
 	lcd_send_cmd (0x0C); //Display on/off control --> D = 1, C and B = 0. (Cursor and blink, last two bits)
-	HAL_Delay(5);
+	HAL_Delay(10);
 	lcd_clear();
 	HAL_Delay(100);
 }
