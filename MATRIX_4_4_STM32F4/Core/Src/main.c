@@ -162,19 +162,20 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		key = scan_key();
 		
-		if (key == 'A') //nhap 5 so:
+		if ((mode == 0) && (key == 'A')) //nhap 5 so:
 		{
 			mode = 1;
+		}
+		else if ((mode == 1) && (key == 'D')) // xac nhan da nhap xong
+		{
+			mode = 3;
 		}
 		else if (key == 'C') //xoa so, clear man hinh
 		{
 			mode = 2;
 		}
 		
-		if ((mode == 1) && (key == 'D')) // xac nhan da nhap xong
-		{
-			mode = 3;
-		}
+
 		
 		if (mode == 1) //nhap 5 so:
 		{
@@ -198,7 +199,7 @@ int main(void)
 					dem ++;
 					if (dem == 5)
 					{
-						mode = 3;
+						mode = 3;  // xac nhan da nhap xong
 					}
 				}
 			}
@@ -208,7 +209,7 @@ int main(void)
 		{
 			
 			lcd_put_cur(2,10);
-			lcd_send_string("Xoa 5 so!!");
+			lcd_send_string("Clear data!");
 			HAL_Delay(600);
 			for(int i = 0; i <5; i++)
 			{

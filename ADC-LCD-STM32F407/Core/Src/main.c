@@ -93,7 +93,7 @@ int main(void)
   MX_ADC1_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-	int dem = 0;
+
 	uint16_t data_adc[5];
 	HAL_ADC_Start_DMA(&hadc1,(uint32_t *)data_adc,5);
   /* USER CODE END 2 */
@@ -106,12 +106,6 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		
-//		printf("Gia tri dem:  %d \n",dem);
-//		if (dem == 100)
-//		{
-//			int rank1 = HAL_ADCEx_InjectedGetValue(&hadc1,ADC_INJECTED_RANK_1);
-//			printf("Gia tri rank1: %d \n",rank1);
-//		}
 		printf("Gia tri ADC_C1:  %d \n",data_adc[0]);
 		printf("Gia tri ADC_C2:  %d \n",data_adc[1]);
 		printf("Gia tri ADC_C3:  %d \n",data_adc[2]);
