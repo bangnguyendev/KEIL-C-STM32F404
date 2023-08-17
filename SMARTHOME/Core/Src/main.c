@@ -34,7 +34,13 @@
 typedef struct
 {
 	char password[6];
-	char user[3][6];
+	char passUser[3][6];
+	enum User {
+		USER_0,
+		USER_1,
+		USER_2,
+		USER_NULL,
+	} user;
 	enum Mode {
 		Mode_None = 0,
 		Mode_Keypad = 1,
@@ -89,6 +95,39 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
+#define SLAVE_ADDRESS_EEPROM 0x50 // change this according to ur setup
+
+void write_eeprom (int address ,int value)
+{
+	uint8_t data_t[4];
+
+	data_t[0] = address;  
+	data_t[1] = value;  
+	HAL_I2C_Master_Transmit (&hi2c2, SLAVE_ADDRESS_EEPROM << 1,(uint8_t *) data_t, 2, HAL_MAX_DELAY);
+	HAL_Delay(10); // tWR Write Cycle Time 5 ms
+	printf("write_eeprom at 0x%X \r\n",address);
+}
+
+uint8_t read_eeprom(uint16_t register_pointer)
+{
+	HAL_StatusTypeDef status = HAL_OK;
+	uint8_t return_value = 0;
+
+	status = HAL_I2C_Mem_Read(&hi2c2, SLAVE_ADDRESS_EEPROM << 1, (uint16_t)register_pointer, I2C_MEMADD_SIZE_8BIT, &return_value, 1, 100);
+
+	/* Check the communication status */
+	if(status != HAL_OK)
+	{
+			
+	}
+	printf("Read EEPROM at [%d] : %d \r\n",register_pointer, return_value);
+	return return_value;
+}
+
+
+
 int matrix_col, matrix_row;  //debug printf LCD
 GPIO_TypeDef* row_port[4] = {ROW0_GPIO_Port, ROW1_GPIO_Port, ROW2_GPIO_Port, ROW3_GPIO_Port};
 GPIO_TypeDef* col_port[4] = {COL0_GPIO_Port, COL1_GPIO_Port, COL2_GPIO_Port, COL3_GPIO_Port};
@@ -125,17 +164,46 @@ char scan_key()
 	return 0x20; // return ve khoang trang
 }
 
-int check_pass(int * sll_pass)
-{
+SMARTHOME check_pass(int * sll_pass)
+{	
 	smarthome.status = SMARTHOME_OK;
+	smarthome.user = USER_NULL;
 	
+	
+	// check user 0
 	for(int j = 0; j < *sll_pass; j++)
 	{	
 		smarthome.status = SMARTHOME_OK;
-		printf("smarthome.password[%d]!=smarthome.user[0][%d] > %d : %d \r\n", j,j,smarthome.password[j],smarthome.user[0][j]);
-		if (smarthome.password[j]!=smarthome.user[0][j])
+		smarthome.passUser[0][j] = read_eeprom(j);
+		printf("smarthome.password[%d] vs smarthome.passUser[0][%d] > %d : %d \r\n", j,j,smarthome.password[j],smarthome.passUser[0][j]);
+		if (smarthome.password[j]!=smarthome.passUser[0][j])
 		{
-			printf("Usser 1: Saiiiiiiiiii \r\n");
+			printf("User 0: NG \r\n");
+			smarthome.status = SMARTHOME_NG;
+			break;
+		}
+	}
+
+	if (smarthome.status == SMARTHOME_OK)
+	{
+		lcd_put_cur(1,0);
+		lcd_send_string("User 0: OK       ");
+		printf("User 0: OK        \r\n");
+		smarthome.user = USER_0;
+		return smarthome;
+	}
+	// end check user 0
+	
+	
+	// check user 1
+	for(int j = 0; j < *sll_pass; j++)
+	{	
+		smarthome.status = SMARTHOME_OK;
+		smarthome.passUser[1][j] = read_eeprom(j+6);
+		printf("smarthome.password[%d] vs smarthome.passUser[1][%d] > %d : %d \r\n", j,j,smarthome.password[j],smarthome.passUser[1][j]);
+		if (smarthome.password[j]!=smarthome.passUser[1][j])
+		{
+			printf("Usser 1: NG \r\n");
 			smarthome.status = SMARTHOME_NG;
 			break;
 		}
@@ -146,16 +214,21 @@ int check_pass(int * sll_pass)
 		lcd_put_cur(1,0);
 		lcd_send_string("User 1: OK       ");
 		printf("User 1: OK        \r\n");
-		return smarthome.status;
-	}
-
+		smarthome.user = USER_1;
+		return smarthome;
+	}					
+	// end check user 1
+	
+	
+	// check user 2
 	for(int j = 0; j < *sll_pass; j++)
 	{	
 		smarthome.status = SMARTHOME_OK;
-		printf("smarthome.password[%d]!=smarthome.user[1][%d] > %d : %d \r\n", j,j,smarthome.password[j],smarthome.user[1][j]);
-		if (smarthome.password[j]!=smarthome.user[1][j])
+		smarthome.passUser[2][j] = read_eeprom(j+6+6);
+		printf("smarthome.password[%d] vs smarthome.passUser[2][%d] > %d : %d \r\n", j,j,smarthome.password[j],smarthome.passUser[2][j]);
+		if (smarthome.password[j]!=smarthome.passUser[2][j])
 		{
-			printf("Usser 2: Saiiiiiiiiii \r\n");
+			printf("Usser 2: NG \r\n");
 			smarthome.status = SMARTHOME_NG;
 			break;
 		}
@@ -166,46 +239,82 @@ int check_pass(int * sll_pass)
 		lcd_put_cur(1,0);
 		lcd_send_string("User 2: OK       ");
 		printf("User 2: OK        \r\n");
-		return smarthome.status;
-	}					
-
-	for(int j = 0; j < *sll_pass; j++)
-	{	
-		smarthome.status = SMARTHOME_OK;
-		printf("smarthome.password[%d]!=smarthome.user[2][%d] > %d : %d \r\n", j,j,smarthome.password[j],smarthome.user[2][j]);
-		if (smarthome.password[j]!=smarthome.user[2][j])
-		{
-			printf("Usser 3: Saiiiiiiiiii \r\n");
-			smarthome.status = SMARTHOME_NG;
-			break;
-		}
+		smarthome.user = USER_2;
+		return smarthome;
 	}
-
-	if (smarthome.status == SMARTHOME_OK)
-	{
-		lcd_put_cur(1,0);
-		lcd_send_string("User 3: OK       ");
-		printf("User 3: OK        \r\n");
-		return smarthome.status;
-	}
-	
-	
-	
-	return smarthome.status;
+	// end check user 2
+	return smarthome;
 }
 
-int display_keypad(void)
-{	
+void write_eeprom_user(int user)
+{
 	
-		for(int i = 0; i <6; i++) //add test pass EEEPROM
-		{
-			smarthome.user[0][i] = '1';
-			smarthome.user[1][i] = '2';
-			smarthome.user[2][i] = '3';
-		}
-		
+	int sll_pass = 0;
+	printf("User %d duoc chon \r\n", user);
+	while(smarthome.mode == Mode_AddUser)
+	{
+			lcd_put_cur(0,0);
+			lcd_send_string("Add MK User");
+			lcd_send_data(user+48);
+			lcd_put_cur(2,0);
+			lcd_send_string("Key #: Done");
+			lcd_put_cur(3,0);
+			lcd_send_string("Key *: Exit");
+			lcd_send_cmd (0x0F); //Display on/off control --> D = 1, C and B = 1. (Cursor and blink, last two bits)
+			lcd_put_cur(1, sll_pass);
+			
+			key = scan_key();
+			
+			if ((47 < key) && (key < 58)) //phim so 48 -> 0, 57 -> 9
+			{
+				if (sll_pass < 6 ) // mode 6 so
+				{
+					printf("KeyNumber: %s \r\n", &key);
+					smarthome.password[sll_pass] = key;
+
+					lcd_send_data(key);
+					sll_pass++;
+				}
+			}
+			else if (key == '*') //exit
+			{
+				printf("Exit setup mat khau User %d \r\n", user);
+				smarthome.mode = Mode_None;
+			}
+			
+			if ((sll_pass > 3) && (key == '#')) //setup done
+			{
+				printf("Mat khau co %d ky tu \r\n", sll_pass);
+				for(int i = 0; i < sll_pass ; i++)
+				{
+					if (user == 0)
+					{
+						write_eeprom(i, smarthome.password[i]);
+						printf("Mat khau: %d - %d \r\n", i, read_eeprom(i));
+					}
+					else	if (user == 1)
+					{
+						write_eeprom(i+6, smarthome.password[i]);
+						printf("Mat khau: %d - %d \r\n", i, read_eeprom(i+6));
+					}
+					else	if (user == 2)
+					{
+						write_eeprom(i+6+6, smarthome.password[i]);
+						printf("Mat khau: %d - %d \r\n", i, read_eeprom(i+6+6));
+					}			
+				}
+				printf("Done setup mat khau User %d \r\n", user);
+				smarthome.mode = Mode_None;
+			}
+			HAL_Delay(100);
+	}		
+}
+
+
+int display_keypad(void)
+{		
 		int sll_pass = 0;
-		
+
 		while(smarthome.mode == Mode_Keypad)
 		{
 				lcd_put_cur(0,0);
@@ -230,7 +339,7 @@ int display_keypad(void)
 				{
 					printf("Kiem tra mat khau \r\n");
 					
-					if (check_pass(&sll_pass))
+					if (check_pass(&sll_pass).status)
 					{
 						smarthome.status = SMARTHOME_OK;
 						smarthome.mode = Mode_None;
@@ -255,6 +364,15 @@ int display_keypad(void)
 				HAL_Delay(100);
 		}
 		return smarthome.status;
+}
+
+void reset_eeprom()
+{
+	for(int i = 0 ; i < 20; i++)
+	{
+		write_eeprom(i,0+48);
+		read_eeprom(i);
+	}
 }
 /* USER CODE END 0 */
 
@@ -286,11 +404,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
   MX_USART2_UART_Init();
   MX_SPI2_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 	lcd_init();
+	//reset_eeprom();
+
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -364,6 +485,9 @@ int main(void)
 				lcd_send_string("Open Door 5 Sec");
 				HAL_Delay(5000);
 				lcd_clear();
+				smarthome.mode = Mode_AddUser;
+				
+				write_eeprom_user(smarthome.user);
 			}
 		}
 		else if (smarthome.mode == Mode_NFC)
